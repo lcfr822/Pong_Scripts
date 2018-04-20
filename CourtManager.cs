@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class CourtManager : MonoBehaviour {
-    Canvas courtCanvas;
     Image cImage;
 
     GameObject court;
@@ -18,8 +17,6 @@ public class CourtManager : MonoBehaviour {
     int p2Score = 0;
 
     bool gameRunning;
-
-    Vector2 prevStartDir;
 
     public Text p1ScoreText;
     public Text p2ScoreText;
@@ -35,13 +32,9 @@ public class CourtManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         ball = GameObject.Find("ball");
-        courtCanvas = FindObjectOfType<Canvas>();
-        court = courtCanvas.transform.GetChild(0).gameObject;
-        cImage = court.GetComponent<Image>();
         gameRunning = true;
         endGame.interactable = false;
         endGame.blocksRaycasts = false;
-
         endGameObject.SetActive(false);
 
         SetupGame();
@@ -79,15 +72,20 @@ public class CourtManager : MonoBehaviour {
         p2ScoreText.text = p2Score.ToString();
 
         Vector2 startDir = Vector2.zero;
-        while(startDir == Vector2.zero || startDir.x == 0 || ((startDir.x <= 0.0f && startDir.x > -0.7) && ((startDir.y <= 1 && startDir.y > 0.7f) && startDir.y == -1) || (startDir.x == 0.1f && (startDir.y >= -1.0f && startDir.y < -0.3f))))
+        while(startDir == Vector2.zero || startDir.x == 0 || ((startDir.x <= 0.0f && startDir.x > -0.7) && ((startDir.y <= 1 && startDir.y > 0.7f) || startDir.y == -1) || (startDir.x == 0.1f && (startDir.y >= -1.0f && startDir.y < -0.3f))))
         {
             startDir = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
-            Debug.Log("StartDir: " + startDir);
+        }
+        if(startDir.x >= 0)
+        {
+            startDir.x += 0.1f;
+        }
+        else
+        {
+            startDir.x -= 0.1f;
         }
         startDir.Normalize();
         ball.GetComponent<Rigidbody2D>().AddForce(startDir * 10f, ForceMode2D.Impulse);
-
-        prevStartDir = startDir;
     }
 
     void FixedUpdate()
