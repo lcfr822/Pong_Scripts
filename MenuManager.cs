@@ -23,11 +23,18 @@ public class MenuManager : MonoBehaviour {
         else if (Input.GetButtonUp("Fire1")) { controlGroup.alpha = 0; }
 	}
 
+    /// <summary>
+    /// Close the application.
+    /// </summary>
     public void Quit()
     {
         Application.Quit();
     }
 
+    /// <summary>
+    /// Delays the transition between levels long enough to play the start sound.
+    /// </summary>
+    /// <returns>WaitForSeconds equal to the length of the start clip.</returns>
     IEnumerator StartGame()
     {
         GetComponent<AudioSource>().PlayOneShot(startClip);
